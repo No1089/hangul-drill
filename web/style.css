@@ -111,9 +111,11 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: center; 
 main.ring {
   flex: none;
   position: relative;
-  width: min(100%, calc(100dvh - 240px));
-  aspect-ratio: 1;
-  margin: auto auto 4.5em;
+  /* Explicit equal sides: Safari doesn't reliably size a flex item from aspect-ratio alone. */
+  --ring: min(calc(100vw - 32px), 568px, calc(100dvh - 260px));
+  width: var(--ring);
+  height: var(--ring);
+  margin: auto; /* centred; the height cap leaves room below for the note */
   padding: 0;
   container-type: inline-size;
 }
@@ -128,8 +130,11 @@ main.ring {
 .ring .choice {
   position: absolute;
   width: 23%;
-  height: 23%;
+  height: auto;
+  aspect-ratio: 1 / 1;
   min-height: 0;
+  -webkit-appearance: none;
+  appearance: none;
   margin: -11.5% 0 0 -11.5%;
   padding: 0;
   border-radius: 50%;

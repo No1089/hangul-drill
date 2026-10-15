@@ -4,7 +4,7 @@ import { newState, pickNext, recordAnswer, pickDistractors, shuffle, recordOf, M
 const $ = s => document.querySelector(s);
 const STORE = 'hangul-drill.v1';
 const DIRS = { read: 'Read', write: 'Write', listen: 'Listen', mix: 'Mix' };
-const DEFAULTS = { groups: ['v1'], choices: 4, gradual: true, sound: true, mode: 'read', play: false, layout: 'below', pace: 'normal' };
+const DEFAULTS = { groups: ['v1'], choices: 4, gradual: true, sound: true, mode: 'read', play: true, layout: 'ring', pace: 'normal', v: 2 };
 // How long a right answer stays on screen (ms). After a mistake it stays longer so the note can be read.
 const PACES = { normal: { clean: 900, mistake: 2200 }, quick: { clean: 400, mistake: 1200 }, minimal: { clean: 120, mistake: 600 } };
 
@@ -22,7 +22,12 @@ let koVoice = null;
 function load() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORE));
-    if (saved?.state) return { settings: { ...DEFAULTS, ...saved.settings }, state: { ...newState(), ...saved.state } };
+    if (saved?.state) {
+      const settings = { ...DEFAULTS, ...saved.settings };
+      // v2 made Play and the circle layout the defaults; move earlier saves over once.
+      if (!(saved.settings?.v >= 2)) Object.assign(settings, { play: true, layout: 'ring', v: 2 });
+      return { settings, state: { ...newState(), ...saved.state } };
+    }
   } catch { /* private mode or corrupt data: start fresh */ }
   return { settings: { ...DEFAULTS }, state: newState() };
 }

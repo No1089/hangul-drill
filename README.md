@@ -9,9 +9,9 @@ on Android Chrome use Install app.
 - **Quick multiple choice.** You see a letter and pick its sound from 3, 4 or 5 options, or the reverse.
   A wrong pick is greyed out and the question stays until you find the right one, so every round ends on
   the correct answer.
-- **Learn or Play.** Learn is the adaptive course described below. Play skips it: letters come up at random
-  from whichever sets you pick, with no introductions, like the old-school drills.
-- **Answers below or in a circle.** The options can sit under the letter or in a ring around it (Settings).
+- **Play or Learn.** Play (the default) gives letters at random from whichever sets you pick, with no
+  introductions, like the old-school drills. Learn is the adaptive course described below.
+- **Answers in a circle or below.** The options sit in a ring around the letter by default, or under it (Settings).
 - **Adjustable pace.** The pause after each answer can be Normal, Quick or Minimal, and a tap skips it anyway.
 - **Two directions.** Read (letter → sound) and Write (sound → letter). A Listen mode exists in the code
   but is switched off (`SPEECH` in `app.js`): device text-to-speech sounds poor for single letters.
