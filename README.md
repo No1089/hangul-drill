@@ -47,3 +47,8 @@ npm test
 
 This was inspired by a small Flash Hangul quiz from the mid-2000s that taught me to read Korean, and that
 I can still read years later. It's gone along with Flash, so this is a fresh take on the same idea.
+
+## License
+
+[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). You're welcome to share and adapt it
+with credit, but not for commercial use. See `LICENSE`.

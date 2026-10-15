@@ -1,6 +1,7 @@
 {
   "name": "learn-hangul",
   "private": true,
+  "license": "CC-BY-NC-4.0",
   "type": "module",
   "scripts": { "test": "node --test test/*.test.mjs" }
 }
