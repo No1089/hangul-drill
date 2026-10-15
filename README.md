@@ -12,6 +12,7 @@ on Android Chrome use Install app.
 - **Learn or Play.** Learn is the adaptive course described below. Play skips it: letters come up at random
   from whichever sets you pick, with no introductions, like the old-school drills.
 - **Answers below or in a circle.** The options can sit under the letter or in a ring around it (Settings).
+- **Adjustable pace.** The pause after each answer can be Normal, Quick or Minimal, and a tap skips it anyway.
 - **Two directions.** Read (letter → sound) and Write (sound → letter). A Listen mode exists in the code
   but is switched off (`SPEECH` in `app.js`): device text-to-speech sounds poor for single letters.
 - **Adaptive order.** Each letter has a Leitner box (0–5) for each direction. Getting it right on the first

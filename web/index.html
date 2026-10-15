@@ -11,6 +11,21 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Hangul">
+<link rel="canonical" href="https://no1089.github.io/hangul-drill/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hangul Drill">
+<meta property="og:title" content="Hangul Drill: learn to read Korean">
+<meta property="og:description" content="A free, offline drill for learning the Korean alphabet in a few minutes a day. No sign-up.">
+<meta property="og:url" content="https://no1089.github.io/hangul-drill/">
+<meta property="og:image" content="https://no1089.github.io/hangul-drill/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Hangul Drill: 한글 on a green tile, with multiple-choice answers a, g/k, o, h">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hangul Drill: learn to read Korean">
+<meta name="twitter:description" content="A free, offline drill for learning the Korean alphabet in a few minutes a day. No sign-up.">
+<meta name="twitter:image" content="https://no1089.github.io/hangul-drill/og.png">
+<meta name="twitter:image:alt" content="Hangul Drill: 한글 on a green tile, with multiple-choice answers a, g/k, o, h">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -72,6 +87,13 @@
       <label><input type="radio" name="layout" value="below"><span>Below the letter</span></label>
       <label><input type="radio" name="layout" value="ring"><span>In a circle around it</span></label>
     </div>
+    <h3>Pause after answering</h3>
+    <div class="seg">
+      <label><input type="radio" name="pace" value="normal"><span>Normal</span></label>
+      <label><input type="radio" name="pace" value="quick"><span>Quick</span></label>
+      <label><input type="radio" name="pace" value="minimal"><span>Minimal</span></label>
+    </div>
+    <p class="muted small hint">You can always tap anywhere to skip the pause.</p>
     <label class="toggle"><input type="checkbox" id="gradual"> <span>Learn: introduce new letters one at a time</span></label>
     <label class="toggle speech"><input type="checkbox" id="sound"> <span>Say the letter after each answer</span></label>
     <p class="muted small">Keys: 1–5 choose, Enter continue<span class="speech">, Space repeat sound</span>.<br>

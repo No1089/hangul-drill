@@ -4,7 +4,9 @@ import { newState, pickNext, recordAnswer, pickDistractors, shuffle, recordOf, M
 const $ = s => document.querySelector(s);
 const STORE = 'hangul-drill.v1';
 const DIRS = { read: 'Read', write: 'Write', listen: 'Listen', mix: 'Mix' };
-const DEFAULTS = { groups: ['v1'], choices: 4, gradual: true, sound: true, mode: 'read', play: false, layout: 'below' };
+const DEFAULTS = { groups: ['v1'], choices: 4, gradual: true, sound: true, mode: 'read', play: false, layout: 'below', pace: 'normal' };
+// How long a right answer stays on screen (ms). After a mistake it stays longer so the note can be read.
+const PACES = { normal: { clean: 900, mistake: 2200 }, quick: { clean: 400, mistake: 1200 }, minimal: { clean: 120, mistake: 600 } };
 
 // Device text-to-speech sounds poor for single Korean letters, so speech (Listen mode, spoken answers)
 // is switched off until there are proper recordings. Flip this to bring it back.
@@ -111,7 +113,8 @@ function choose(option, button) {
     renderPromptExtras(true);
     renderScore();
     maybeSuggestNextGroup();
-    advanceTimer = setTimeout(nextQuestion, q.item.note && q.wrong.length ? 2200 : 900);
+    const pace = PACES[settings.pace] || PACES.normal;
+    advanceTimer = setTimeout(nextQuestion, q.item.note && q.wrong.length ? pace.mistake : pace.clean);
   } else {
     q.wrong.push(option.id);
     button.classList.add('wrong');
@@ -293,6 +296,7 @@ function renderSettings() {
   $('#gradual').checked = settings.gradual;
   $('#sound').checked = settings.sound;
   for (const input of document.querySelectorAll('input[name=layout]')) input.checked = input.value === settings.layout;
+  for (const input of document.querySelectorAll('input[name=pace]')) input.checked = input.value === settings.pace;
 }
 
 function renderStats(dir) {
@@ -335,6 +339,9 @@ $('#settingsBtn').addEventListener('click', () => { renderSettings(); $('#settin
 $('#settings').addEventListener('close', () => nextQuestion());
 for (const input of document.querySelectorAll('input[name=choices]')) {
   input.addEventListener('change', () => { settings.choices = Number(input.value); save(); });
+}
+for (const input of document.querySelectorAll('input[name=pace]')) {
+  input.addEventListener('change', () => { settings.pace = input.value; save(); });
 }
 for (const input of document.querySelectorAll('input[name=layout]')) {
   input.addEventListener('change', () => { settings.layout = input.value; save(); });
