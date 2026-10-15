@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hangul Drill</title>
+<meta name="description" content="Learn to read Korean Hangul with quick multiple-choice drills.">
+<meta name="theme-color" content="#16130f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4ecdb" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hangul">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><span class="hangul">한글</span> drill</div>
+    <div class="score"><b id="score">0/0</b> <span id="pct"></span> <span id="streak"></span></div>
+    <button class="icon" id="statsBtn" aria-label="Progress">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>
+    </button>
+    <button class="icon" id="settingsBtn" aria-label="Settings">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+    </button>
+  </header>
+
+  <div class="banner" id="banner" hidden>
+    <span></span>
+    <button class="yes">Add</button>
+    <button class="no" aria-label="Not now">Later</button>
+  </div>
+
+  <main>
+    <section class="prompt" id="prompt" aria-live="polite">
+      <div class="tag" id="tag"></div>
+      <div class="glyph" id="glyph"></div>
+      <button class="play" id="play" hidden aria-label="Play sound">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+      </button>
+      <div class="answer" id="answer"></div>
+      <div class="note" id="note"></div>
+    </section>
+    <section class="choices" id="choices"></section>
+  </main>
+
+  <nav class="modes" id="modes" aria-label="Direction"></nav>
+</div>
+
+<dialog id="settings">
+  <form method="dialog">
+    <header><h2>Practice</h2><button class="close" aria-label="Done">Done</button></header>
+    <h3>Letters</h3>
+    <div id="groups"></div>
+    <h3>Choices</h3>
+    <div class="seg">
+      <label><input type="radio" name="choices" value="3"><span>3</span></label>
+      <label><input type="radio" name="choices" value="4"><span>4</span></label>
+      <label><input type="radio" name="choices" value="5"><span>5</span></label>
+    </div>
+    <label class="toggle"><input type="checkbox" id="gradual"> <span>Introduce new letters one at a time</span></label>
+    <label class="toggle"><input type="checkbox" id="sound"> <span>Say the letter after each answer</span></label>
+    <p class="muted small">Keys: 1–5 choose, Enter continue, Space repeat sound.<br>
+      Progress is saved on this device only. <button type="button" class="link" id="reset">Reset progress</button></p>
+  </form>
+</dialog>
+
+<dialog id="stats">
+  <form method="dialog">
+    <header><h2>Progress</h2><button class="close" aria-label="Close">Done</button></header>
+    <div class="seg" id="statdirs">
+      <button type="button" data-dir="read">Read</button>
+      <button type="button" data-dir="write">Write</button>
+      <button type="button" data-dir="listen">Listen</button>
+    </div>
+    <div id="statbody"></div>
+    <p class="legend muted small"><i data-box="new"></i>new <i data-box="0"></i>weak <i data-box="2"></i>learning <i data-box="4"></i>known</p>
+  </form>
+</dialog>
+</body>
+</html>
