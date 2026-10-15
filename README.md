@@ -20,7 +20,8 @@ on Android Chrome use Install app.
   actually confused this one with before.
 - **Syllable blocks.** Practise CV and CVC blocks (가, 각 …) built from the letters you've selected.
 - **Progress view** with a mastery grid for each direction. It suggests the next letter set when you're ready.
-- Progress stays in the browser on each device. There are no accounts and no tracking.
+- Progress stays in the browser on each device. There are no accounts. Visits are counted anonymously with
+  [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/), which uses no cookies and no personal data.
 
 Romanization follows the official Revised Romanization of Korean.
 
