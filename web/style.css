@@ -55,15 +55,18 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .brand.hangul { color: var(--accent); font-size: 1.25em; white-space: nowrap; }
 .seg.style { padding: 3px; background: var(--surface); }
 .seg.style button { padding: 6px 12px; font-size: 14px; }
-.score { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; display: flex; gap: 8px; align-items: baseline; }
+.score { margin-left: auto; white-space: nowrap; color: var(--muted); font-variant-numeric: tabular-nums; display: flex; gap: 8px; align-items: baseline; }
 .score b { color: var(--text); }
 #streak { color: var(--warm); }
+@media (max-width: 480px) { #streak { display: none; } } /* no room next to Learn/Play */
 .icon { width: 40px; height: 40px; border: 0; border-radius: 12px; background: var(--surface); display: grid; place-items: center; }
 .icon svg, .play svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 .play svg path:first-child { fill: currentColor; }
 
 .banner { display: flex; align-items: center; gap: 8px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 8px; }
-.banner span { flex: 1; }
+.banner > span { flex: 1; }
+.unlock .sample { margin-left: 4px; letter-spacing: .08em; color: var(--accent); }
+.unlock small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
 .banner button { border: 0; border-radius: 10px; padding: 6px 12px; background: transparent; color: var(--muted); }
 .banner .yes { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
 

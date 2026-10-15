@@ -49,6 +49,13 @@
     </button>
   </header>
 
+  <div class="banner unlock" id="unlock" hidden role="status">
+    <span><span class="what"></span><b class="sample hangul"></b>
+      <small>Change this or pick letter sets yourself in Settings.</small></span>
+    <button class="settings">Settings</button>
+    <button class="ok yes">OK</button>
+  </div>
+
   <div class="banner" id="banner" hidden>
     <span></span>
     <button class="yes">Add</button>
@@ -94,6 +101,7 @@
       <label><input type="radio" name="pace" value="minimal"><span>Minimal</span></label>
     </div>
     <p class="muted small hint">You can always tap anywhere to skip the pause.</p>
+    <label class="toggle"><input type="checkbox" id="autoAdd"> <span>Play: add the next letter set every 20 answers (if at least 15 were right first time)</span></label>
     <label class="toggle"><input type="checkbox" id="gradual"> <span>Learn: introduce new letters one at a time</span></label>
     <label class="toggle speech"><input type="checkbox" id="sound"> <span>Say the letter after each answer</span></label>
     <p class="muted small">Keys: 1–5 choose, Enter continue<span class="speech">, Space repeat sound</span>.<br>

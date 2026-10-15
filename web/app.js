@@ -4,7 +4,10 @@ import { newState, pickNext, recordAnswer, pickDistractors, shuffle, recordOf, M
 const $ = s => document.querySelector(s);
 const STORE = 'hangul-drill.v1';
 const DIRS = { read: 'Read', write: 'Write', listen: 'Listen', mix: 'Mix' };
-const DEFAULTS = { groups: ['v1'], choices: 4, gradual: true, sound: true, mode: 'read', play: true, layout: 'ring', pace: 'normal', v: 2 };
+const DEFAULTS = { groups: ['v1'], choices: 4, gradual: true, sound: true, mode: 'read', play: true, layout: 'ring', pace: 'normal', autoAdd: true, v: 2 };
+// Play adds the next letter set after this many answers, if enough of them were right first time.
+const UNLOCK_EVERY = 20;
+const UNLOCK_MIN_RIGHT = 15;
 // How long a right answer stays on screen (ms). After a mistake it stays longer so the note can be read.
 const PACES = { normal: { clean: 900, mistake: 2200 }, quick: { clean: 400, mistake: 1200 }, minimal: { clean: 120, mistake: 600 } };
 
@@ -78,12 +81,16 @@ function nextQuestion() {
   let dir = settings.mode === 'mix' ? availableDirs()[Math.floor(Math.random() * availableDirs().length)] : settings.mode;
   if (dir === 'listen' && !koVoice) dir = 'read';
 
-  const pick = pickNext(usePool, dir, state, { gradual: isJamo && settings.gradual, play: settings.play });
+  // Right after Play adds a set, ask its letters first so they don't get lost in the mix.
+  const fresh = settings.play ? (settings.playFresh || []).filter(id => jamoPool.includes(id)) : [];
+  settings.playFresh = fresh.slice(1);
+  const pick = fresh.length ? { id: fresh[0], isNew: false, again: false }
+    : pickNext(usePool, dir, state, { gradual: isJamo && settings.gradual, play: settings.play });
   const item = itemFor(pick.id);
   // Only show the "new letter" card the first time a letter appears in any direction.
   const seenElsewhere = Object.keys(DIRS).some(d => recordOf(state, d, pick.id)?.seen);
   q = { item, dir, wrong: [], done: false, again: pick.again, intro: pick.isNew && isJamo && !seenElsewhere && !settings.play };
-  q.options = q.intro ? [] : buildOptions(item, dir, isJamo ? jamoPool : null);
+  q.options = q.intro ? [] : buildOptions(item, dir, jamoPool);
   render();
   if (dir === 'listen' && !q.intro) speak(item.speak);
 }
@@ -104,6 +111,21 @@ function buildOptions(item, dir, jamoPool) {
   return shuffle([item, ...distractors]);
 }
 
+function trackPlay(clean) {
+  const recent = settings.playWindow = [...(settings.playWindow || []), clean ? 1 : 0].slice(-UNLOCK_EVERY);
+  if (recent.length < UNLOCK_EVERY || recent.reduce((a, b) => a + b, 0) < UNLOCK_MIN_RIGHT) return;
+  const next = GROUPS.find(g => !settings.groups.includes(g.id));
+  if (!next) return;
+  settings.groups = GROUPS.map(g => g.id).filter(id => id === next.id || settings.groups.includes(id));
+  settings.playWindow = [];
+  settings.playFresh = next.items ? shuffle(next.items.map(i => i.id)).slice(0, 5) : [];
+  const sample = next.items ? next.items.map(i => i.hangul).join(' ') : next.final ? '각 난 말' : '가 너 도';
+  const box = $('#unlock');
+  box.querySelector('.what').textContent = `New letters added: ${next.name.replace('-', '\u2011')} `; // no break at the hyphen
+  box.querySelector('.sample').textContent = sample;
+  box.hidden = false;
+}
+
 function choose(option, button) {
   if (!q || q.done || q.intro || q.wrong.includes(option.id)) return;
   if (option.id === q.item.id) {
@@ -111,6 +133,7 @@ function choose(option, button) {
     session.questions++;
     if (!q.wrong.length) { session.right++; session.streak++; } else session.streak = 0;
     recordAnswer(state, q.dir, q.item.id, q.wrong);
+    if (settings.play && settings.autoAdd) trackPlay(!q.wrong.length);
     save();
     button.classList.add('right');
     $('#choices').classList.add('done');
@@ -299,6 +322,7 @@ function renderSettings() {
     input.checked = Number(input.value) === settings.choices;
   }
   $('#gradual').checked = settings.gradual;
+  $('#autoAdd').checked = settings.autoAdd;
   $('#sound').checked = settings.sound;
   for (const input of document.querySelectorAll('input[name=layout]')) input.checked = input.value === settings.layout;
   for (const input of document.querySelectorAll('input[name=pace]')) input.checked = input.value === settings.pace;
@@ -351,6 +375,13 @@ for (const input of document.querySelectorAll('input[name=pace]')) {
 for (const input of document.querySelectorAll('input[name=layout]')) {
   input.addEventListener('change', () => { settings.layout = input.value; save(); });
 }
+$('#autoAdd').addEventListener('change', e => { settings.autoAdd = e.target.checked; settings.playWindow = []; save(); });
+$('#unlock .ok').addEventListener('click', () => { $('#unlock').hidden = true; });
+$('#unlock .settings').addEventListener('click', () => {
+  $('#unlock').hidden = true;
+  renderSettings();
+  $('#settings').showModal();
+});
 $('#gradual').addEventListener('change', e => { settings.gradual = e.target.checked; save(); });
 $('#sound').addEventListener('change', e => { settings.sound = e.target.checked; save(); });
 $('#reset').addEventListener('click', () => {

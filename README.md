@@ -10,7 +10,9 @@ on Android Chrome use Install app.
   A wrong pick is greyed out and the question stays until you find the right one, so every round ends on
   the correct answer.
 - **Play or Learn.** Play (the default) gives letters at random from whichever sets you pick, with no
-  introductions, like the old-school drills. Learn is the adaptive course described below.
+  introductions, like the old-school drills. Every 20 answers it adds the next letter set, as long as at
+  least 15 were right first time, and says so (switch this off in Settings). Learn is the adaptive course
+  described below.
 - **Answers in a circle or below.** The options sit in a ring around the letter by default, or under it (Settings).
 - **Adjustable pace.** The pause after each answer can be Normal, Quick or Minimal, and a tap skips it anyway.
 - **Two directions.** Read (letter → sound) and Write (sound → letter). A Listen mode exists in the code
