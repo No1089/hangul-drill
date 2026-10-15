@@ -6,7 +6,12 @@ const STORE = 'hangul-drill.v1';
 const DIRS = { read: 'Read', write: 'Write', listen: 'Listen', mix: 'Mix' };
 const DEFAULTS = { groups: ['v1'], choices: 4, gradual: true, sound: true, mode: 'read', play: false, layout: 'below' };
 
+// Device text-to-speech sounds poor for single Korean letters, so speech (Listen mode, spoken answers)
+// is switched off until there are proper recordings. Flip this to bring it back.
+const SPEECH = false;
+
 let { settings, state } = load();
+if (!SPEECH && settings.mode === 'listen') settings.mode = 'read';
 const session = { questions: 0, right: 0, streak: 0 };
 let q = null; // current question
 let advanceTimer = 0;
@@ -27,6 +32,7 @@ function save() {
 // ---------- speech ----------
 
 function findVoice() {
+  if (!SPEECH) return;
   if (!('speechSynthesis' in window)) return;
   const voices = speechSynthesis.getVoices().filter(v => v.lang.replace('_', '-').toLowerCase().startsWith('ko'));
   koVoice = voices.find(v => v.localService) || voices[0] || null;
@@ -208,6 +214,7 @@ function renderModes() {
   const nav = $('#modes');
   nav.replaceChildren();
   for (const [dir, name] of Object.entries(DIRS)) {
+    if (dir === 'listen' && !SPEECH) continue;
     const b = document.createElement('button');
     b.textContent = name;
     b.setAttribute('aria-pressed', settings.mode === dir);
@@ -384,6 +391,10 @@ for (const b of document.querySelectorAll('#style button')) {
   });
 }
 
+if (!SPEECH) {
+  for (const el of document.querySelectorAll('.speech')) el.hidden = true;
+  $('.modes').style.gridTemplateColumns = 'repeat(3, 1fr)';
+}
 renderStyle();
 renderModes();
 renderScore();

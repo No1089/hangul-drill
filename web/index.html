@@ -73,8 +73,8 @@
       <label><input type="radio" name="layout" value="ring"><span>In a circle around it</span></label>
     </div>
     <label class="toggle"><input type="checkbox" id="gradual"> <span>Learn: introduce new letters one at a time</span></label>
-    <label class="toggle"><input type="checkbox" id="sound"> <span>Say the letter after each answer</span></label>
-    <p class="muted small">Keys: 1–5 choose, Enter continue, Space repeat sound.<br>
+    <label class="toggle speech"><input type="checkbox" id="sound"> <span>Say the letter after each answer</span></label>
+    <p class="muted small">Keys: 1–5 choose, Enter continue<span class="speech">, Space repeat sound</span>.<br>
       Progress is saved on this device only; visits are counted anonymously. <a href="https://github.com/No1089/hangul-drill">Source</a> · CC BY-NC 4.0.<br><button type="button" class="link" id="reset">Reset progress</button></p>
   </form>
 </dialog>
@@ -85,7 +85,7 @@
     <div class="seg" id="statdirs">
       <button type="button" data-dir="read">Read</button>
       <button type="button" data-dir="write">Write</button>
-      <button type="button" data-dir="listen">Listen</button>
+      <button type="button" class="speech" data-dir="listen">Listen</button>
     </div>
     <div id="statbody"></div>
     <p class="legend muted small"><i data-box="new"></i>new <i data-box="0"></i>weak <i data-box="2"></i>learning <i data-box="4"></i>known</p>
