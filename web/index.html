@@ -20,7 +20,11 @@
 <body>
 <div class="app">
   <header class="top">
-    <div class="brand"><span class="hangul">한글</span> drill</div>
+    <div class="brand hangul" aria-label="Hangul Drill">한글</div>
+    <div class="seg style" id="style" role="group" aria-label="Style">
+      <button type="button" data-play="false" title="Adaptive: new letters one at a time, weak letters more often">Learn</button>
+      <button type="button" data-play="true" title="Random letters from the selected sets">Play</button>
+    </div>
     <div class="score"><b id="score">0/0</b> <span id="pct"></span> <span id="streak"></span></div>
     <button class="icon" id="statsBtn" aria-label="Progress">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>
@@ -63,7 +67,12 @@
       <label><input type="radio" name="choices" value="4"><span>4</span></label>
       <label><input type="radio" name="choices" value="5"><span>5</span></label>
     </div>
-    <label class="toggle"><input type="checkbox" id="gradual"> <span>Introduce new letters one at a time</span></label>
+    <h3>Answers</h3>
+    <div class="seg">
+      <label><input type="radio" name="layout" value="below"><span>Below the letter</span></label>
+      <label><input type="radio" name="layout" value="ring"><span>In a circle around it</span></label>
+    </div>
+    <label class="toggle"><input type="checkbox" id="gradual"> <span>Learn: introduce new letters one at a time</span></label>
     <label class="toggle"><input type="checkbox" id="sound"> <span>Say the letter after each answer</span></label>
     <p class="muted small">Keys: 1–5 choose, Enter continue, Space repeat sound.<br>
       Progress is saved on this device only; visits are counted anonymously. <a href="https://github.com/No1089/hangul-drill">Source</a> · CC BY-NC 4.0.<br><button type="button" class="link" id="reset">Reset progress</button></p>

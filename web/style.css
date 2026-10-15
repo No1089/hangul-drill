@@ -52,7 +52,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* header */
 .top { display: flex; align-items: center; gap: 8px; padding: 12px 0; }
 .brand { font-weight: 700; letter-spacing: .02em; color: var(--muted); }
-.brand .hangul { color: var(--accent); font-size: 1.15em; }
+.brand.hangul { color: var(--accent); font-size: 1.25em; white-space: nowrap; }
+.seg.style { padding: 3px; background: var(--surface); }
+.seg.style button { padding: 6px 12px; font-size: 14px; }
 .score { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; display: flex; gap: 8px; align-items: baseline; }
 .score b { color: var(--text); }
 #streak { color: var(--warm); }
@@ -104,6 +106,37 @@ main { flex: 1; display: flex; flex-direction: column; justify-content: center; 
 .choice.gotit { font-size: 20px; background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 @media (prefers-reduced-motion: reduce) { .choice.wrong { animation: none; } .choice { transition: none; } }
+
+/* circle layout: answers in a ring around the letter */
+main.ring {
+  flex: none;
+  position: relative;
+  width: min(100%, calc(100dvh - 240px));
+  aspect-ratio: 1;
+  margin: auto auto 4.5em;
+  padding: 0;
+  container-type: inline-size;
+}
+.ring .prompt { position: absolute; inset: 0; min-height: 0; }
+.ring .glyph.hangul { font-size: 24cqi; }
+.ring .glyph.latin { font-size: 12cqi; }
+.ring .tag { font-size: 3.4cqi; }
+.ring .answer { min-height: 0; font-size: 6cqi; }
+.ring .note { position: absolute; top: 100%; left: 0; right: 0; margin: 0 auto; min-height: 0; padding-top: 10px; }
+.ring .play { width: 30cqi; height: 30cqi; }
+.ring .choices { position: absolute; inset: 0; display: block; pointer-events: none; }
+.ring .choice {
+  position: absolute;
+  width: 23%;
+  height: 23%;
+  min-height: 0;
+  margin: -11.5% 0 0 -11.5%;
+  padding: 0;
+  border-radius: 50%;
+  pointer-events: auto;
+  font-size: calc(6.5cqi * min(1, 4.2 / var(--len, 1))); /* shrink long romanizations to fit */
+}
+.ring .choice.hangul { font-size: 10cqi; }
 
 /* direction switch */
 .modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 4px; margin: 4px 0 12px; background: var(--surface); border-radius: 14px; }

@@ -23,9 +23,11 @@ function weightedIndex(weights, rng) {
 }
 
 // pool: item ids in teaching order. Returns { id, isNew, again }.
-export function pickNext(pool, dir, state, { gradual = true, rng = Math.random } = {}) {
+// play: plain random choice from the whole pool (still avoiding immediate repeats), no scheduling.
+export function pickNext(pool, dir, state, { gradual = true, play = false, rng = Math.random } = {}) {
+  if (play) gradual = false;
   const due = state.requeue.findIndex(r => r.dir === dir && r.at <= state.turn && pool.includes(r.id));
-  if (due >= 0) return { id: state.requeue.splice(due, 1)[0].id, isNew: false, again: true };
+  if (due >= 0 && !play) return { id: state.requeue.splice(due, 1)[0].id, isNew: false, again: true };
 
   const seen = pool.filter(id => recordOf(state, dir, id)?.seen);
   if (gradual) {
@@ -37,7 +39,7 @@ export function pickNext(pool, dir, state, { gradual = true, rng = Math.random }
   // Don't repeat the last couple of letters when there's enough else to ask.
   const recent = state.recent.filter(r => r.dir === dir).slice(-2).map(r => r.id);
   if (active.length > recent.length + 1) active = active.filter(id => !recent.includes(id));
-  const weights = active.map(id => WEIGHTS[recordOf(state, dir, id)?.box ?? 0]);
+  const weights = active.map(id => (play ? 1 : WEIGHTS[recordOf(state, dir, id)?.box ?? 0]));
   return { id: active[weightedIndex(weights, rng)], isNew: false, again: false };
 }
 

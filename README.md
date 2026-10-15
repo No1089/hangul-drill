@@ -9,6 +9,9 @@ on Android Chrome use Install app.
 - **Quick multiple choice.** You see a letter and pick its sound from 3, 4 or 5 options, or the reverse.
   A wrong pick is greyed out and the question stays until you find the right one, so every round ends on
   the correct answer.
+- **Learn or Play.** Learn is the adaptive course described below. Play skips it: letters come up at random
+  from whichever sets you pick, with no introductions, like the old-school drills.
+- **Answers below or in a circle.** The options can sit under the letter or in a ring around it (Settings).
 - **Three directions.** Read (letter → sound), Write (sound → letter) and Listen (hear it → letter, using
   the device's Korean voice).
 - **Adaptive order.** Each letter has a Leitner box (0–5) for each direction. Getting it right on the first

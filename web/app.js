@@ -4,7 +4,7 @@ import { newState, pickNext, recordAnswer, pickDistractors, shuffle, recordOf, M
 const $ = s => document.querySelector(s);
 const STORE = 'hangul-drill.v1';
 const DIRS = { read: 'Read', write: 'Write', listen: 'Listen', mix: 'Mix' };
-const DEFAULTS = { groups: ['v1'], choices: 4, gradual: true, sound: true, mode: 'read' };
+const DEFAULTS = { groups: ['v1'], choices: 4, gradual: true, sound: true, mode: 'read', play: false, layout: 'below' };
 
 let { settings, state } = load();
 const session = { questions: 0, right: 0, streak: 0 };
@@ -65,11 +65,11 @@ function nextQuestion() {
   let dir = settings.mode === 'mix' ? availableDirs()[Math.floor(Math.random() * availableDirs().length)] : settings.mode;
   if (dir === 'listen' && !koVoice) dir = 'read';
 
-  const pick = pickNext(usePool, dir, state, { gradual: isJamo && settings.gradual });
+  const pick = pickNext(usePool, dir, state, { gradual: isJamo && settings.gradual, play: settings.play });
   const item = itemFor(pick.id);
   // Only show the "new letter" card the first time a letter appears in any direction.
   const seenElsewhere = Object.keys(DIRS).some(d => recordOf(state, d, pick.id)?.seen);
-  q = { item, dir, wrong: [], done: false, again: pick.again, intro: pick.isNew && isJamo && !seenElsewhere };
+  q = { item, dir, wrong: [], done: false, again: pick.again, intro: pick.isNew && isJamo && !seenElsewhere && !settings.play };
   q.options = q.intro ? [] : buildOptions(item, dir, isJamo ? jamoPool : null);
   render();
   if (dir === 'listen' && !q.intro) speak(item.speak);
@@ -145,6 +145,8 @@ function render() {
   const box = $('#choices');
   box.replaceChildren();
   box.className = `choices n${q.intro ? 1 : q.options.length}`;
+  const ring = settings.layout === 'ring' && !q.intro;
+  $('main').classList.toggle('ring', ring);
   if (q.intro) {
     const ok = document.createElement('button');
     ok.className = 'choice gotit';
@@ -165,6 +167,13 @@ function render() {
     b.className = 'choice ' + (dir === 'read' ? 'latin' : 'hangul');
     b.textContent = text;
     b.dataset.key = i + 1;
+    if (ring) {
+      // Evenly round the circle, starting at the top.
+      const a = -Math.PI / 2 + (2 * Math.PI * i) / q.options.length;
+      b.style.left = `${50 + 38 * Math.cos(a)}%`;
+      b.style.top = `${50 + 38 * Math.sin(a)}%`;
+      b.style.setProperty('--len', text.length);
+    }
     b.addEventListener('click', e => {
       e.stopPropagation(); // the container's "tap to continue" must not see the answering tap
       if (q.done) nextQuestion(); else choose(opt, b);
@@ -187,6 +196,12 @@ function renderScore() {
   $('#score').textContent = session.questions ? `${session.right}/${session.questions}` : '0/0';
   $('#pct').textContent = session.questions ? `${Math.round((100 * session.right) / session.questions)}%` : '';
   $('#streak').textContent = session.streak >= 3 ? `${session.streak} in a row` : '';
+}
+
+function renderStyle() {
+  for (const b of document.querySelectorAll('#style button')) {
+    b.setAttribute('aria-pressed', String(b.dataset.play === 'true') === String(settings.play));
+  }
 }
 
 function renderModes() {
@@ -225,7 +240,7 @@ function groupMastery(group, dir) {
 
 function maybeSuggestNextGroup() {
   const banner = $('#banner');
-  if (!banner.hidden || q.item.kind !== 'jamo') return;
+  if (!banner.hidden || q.item.kind !== 'jamo' || settings.play) return;
   const dir = q.dir;
   const selected = selectedGroups('jamo');
   if (!selected.length || !selected.every(g => groupMastery(g, dir).ready)) return;
@@ -270,6 +285,7 @@ function renderSettings() {
   }
   $('#gradual').checked = settings.gradual;
   $('#sound').checked = settings.sound;
+  for (const input of document.querySelectorAll('input[name=layout]')) input.checked = input.value === settings.layout;
 }
 
 function renderStats(dir) {
@@ -313,6 +329,9 @@ $('#settings').addEventListener('close', () => nextQuestion());
 for (const input of document.querySelectorAll('input[name=choices]')) {
   input.addEventListener('change', () => { settings.choices = Number(input.value); save(); });
 }
+for (const input of document.querySelectorAll('input[name=layout]')) {
+  input.addEventListener('change', () => { settings.layout = input.value; save(); });
+}
 $('#gradual').addEventListener('change', e => { settings.gradual = e.target.checked; save(); });
 $('#sound').addEventListener('change', e => { settings.sound = e.target.checked; save(); });
 $('#reset').addEventListener('click', () => {
@@ -335,8 +354,8 @@ for (const d of document.querySelectorAll('dialog')) {
 $('#banner button.no').addEventListener('click', () => { $('#banner').hidden = true; });
 
 $('#play').addEventListener('click', () => speak(q.item.speak));
-$('#choices').addEventListener('click', e => {
-  if (q?.done && !e.target.closest('.choice:not(.right)')) nextQuestion(); // tap again to skip the pause
+$('main').addEventListener('click', e => {
+  if (q?.done && !e.target.closest('.choice:not(.right), #play')) nextQuestion(); // tap again to skip the pause
 });
 document.addEventListener('keydown', e => {
   if (document.querySelector('dialog[open]') || e.metaKey || e.ctrlKey || e.altKey) return;
@@ -355,6 +374,17 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
   navigator.serviceWorker.register('sw.js');
 }
 
+for (const b of document.querySelectorAll('#style button')) {
+  b.addEventListener('click', () => {
+    settings.play = b.dataset.play === 'true';
+    $('#banner').hidden = true;
+    save();
+    renderStyle();
+    nextQuestion();
+  });
+}
+
+renderStyle();
 renderModes();
 renderScore();
 nextQuestion();

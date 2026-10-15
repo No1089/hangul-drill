@@ -125,3 +125,18 @@ test('syllable distractors never share the answer romanization', () => {
     assert.ok(d.every(x => x.roman !== item.roman), `${block}: ${d.map(x => x.roman)}`);
   }
 });
+
+test('play mode picks from the whole pool, without intros or requeues', () => {
+  const pool = GROUPS.find(g => g.id === 'c1').items.map(i => i.id);
+  const state = newState();
+  const r = rng(17);
+  recordAnswer(state, 'read', 'ㄱ', ['ㅋ'], { rng: r }); // would normally be requeued
+  const seen = new Set();
+  for (let n = 0; n < 200; n++) {
+    const p = pickNext(pool, 'read', state, { play: true, rng: r });
+    assert.ok(!p.isNew && !p.again);
+    seen.add(p.id);
+    recordAnswer(state, 'read', p.id, [], { rng: r });
+  }
+  assert.equal(seen.size, pool.length);
+});
