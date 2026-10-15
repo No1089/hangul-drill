@@ -4,6 +4,8 @@ import { newState, pickNext, recordAnswer, pickDistractors, shuffle, recordOf, M
 const $ = s => document.querySelector(s);
 const STORE = 'hangul-drill.v1';
 const DIRS = { read: 'Read', write: 'Write', listen: 'Listen', mix: 'Mix' };
+// Bottom-bar labels show the direction itself: what you see → what you pick.
+const DIR_HINTS = { read: 'ㄱ → g', write: 'g → ㄱ', listen: '♪ → ㄱ', mix: 'ㄱ ⇄ g' };
 const DEFAULTS = { groups: ['v1'], choices: 4, gradual: true, sound: true, mode: 'read', play: true, layout: 'ring', pace: 'normal', autoAdd: true, v: 2 };
 // Play adds the next letter set after this many answers, if enough of them were right first time.
 const UNLOCK_EVERY = 20;
@@ -247,7 +249,13 @@ function renderModes() {
   for (const [dir, name] of Object.entries(DIRS)) {
     if (dir === 'listen' && !SPEECH) continue;
     const b = document.createElement('button');
-    b.textContent = name;
+    const hint = document.createElement('span');
+    hint.className = 'hint hangul';
+    hint.textContent = DIR_HINTS[dir];
+    const word = document.createElement('small');
+    word.textContent = name;
+    b.append(hint, word);
+    b.setAttribute('aria-label', `${name}: ${dir === 'read' ? 'Hangul to roman' : dir === 'write' ? 'roman to Hangul' : 'both directions'}`);
     b.setAttribute('aria-pressed', settings.mode === dir);
     if (dir === 'listen' && !koVoice) {
       b.disabled = true;

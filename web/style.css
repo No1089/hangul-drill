@@ -150,6 +150,9 @@ main.ring {
 .modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 4px; margin: 4px 0 12px; background: var(--surface); border-radius: 14px; }
 .modes button, .seg button, .seg span { border: 0; border-radius: 10px; padding: 10px 0; background: transparent; color: var(--muted); font-weight: 600; text-align: center; }
 .modes button[aria-pressed=true], .seg button[aria-pressed=true], .seg input:checked + span { background: var(--surface-2); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+.modes button { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 0; }
+.modes .hint { font-size: 17px; }
+.modes small { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; }
 .modes button:disabled { opacity: .35; cursor: default; }
 
 /* dialogs */

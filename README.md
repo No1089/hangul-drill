@@ -15,7 +15,8 @@ on Android Chrome use Install app.
   described below.
 - **Answers in a circle or below.** The options sit in a ring around the letter by default, or under it (Settings).
 - **Adjustable pace.** The pause after each answer can be Normal, Quick or Minimal, and a tap skips it anyway.
-- **Two directions.** Read (letter → sound) and Write (sound → letter). A Listen mode exists in the code
+- **Two directions.** Read (ㄱ → g: see the letter, pick the romanization), Write (g → ㄱ: see the
+  romanization, pick the letter), or Mix for both. A Listen mode exists in the code
   but is switched off (`SPEECH` in `app.js`): device text-to-speech sounds poor for single letters.
 - **Adaptive order.** Each letter has a Leitner box (0–5) for each direction. Getting it right on the first
   try moves it up one box, and a mistake sends it back to box 0. Weak letters come up far more often, and a
