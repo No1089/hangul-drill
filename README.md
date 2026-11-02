@@ -58,5 +58,6 @@ I can still read years later. It's gone along with Flash, so this is a fresh tak
 
 ## License
 
-[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). You're welcome to share and adapt it
-with credit, but not for commercial use. See `LICENSE`.
+[PolyForm Noncommercial 1.0.0](LICENSE). You're welcome to use, share and adapt
+it, with the notice line kept, but not for commercial use. Versions published
+before 2 November 2026 were CC BY-NC 4.0, and copies obtained then keep those terms.
